@@ -10,6 +10,8 @@ public class ContaCorrenteTest {
 
     private ContaCorrente contaDoJoao;
     private Correntista joao;
+    private ContaCorrente contaDaMaria;
+    private Correntista maria;
     private float saldoInicial;
 
     @Before
@@ -17,6 +19,9 @@ public class ContaCorrenteTest {
         joao = new Correntista("joao",11111 );
         contaDoJoao = new ContaCorrente(1, joao);
         saldoInicial = contaDoJoao.getSaldoEmReais();
+
+        maria = new Correntista("Maria", 22222);
+        contaDaMaria = new ContaCorrente(2, maria);
     }
 
     @Test
@@ -62,43 +67,37 @@ public class ContaCorrenteTest {
 
     }
 
-//    @Test
-//    public void testarSaqueComFundos() {
-//        contaDoJoao.sacar(2);
-//        assertEquals("O valor sacado deve ser descontado do saldo da conta",
-//                saldoInicial - 2,
-//                contaDoJoao.getSaldoEmReais()
-//        );
-//    }
-//
-//    @Test
-//    public void testarSaqueSemFundos() {
-//        contaDoJoao.sacar(100000);
-//        assertEquals("Saques de valores maiores que o saldo não devem ser permitidos",
-//                saldoInicial,
-//                contaDoJoao.getSaldoEmReais()
-//        );
-//    }
+    @Test
+    public void testarSaqueComFundos() {
+        contaDoJoao.sacar(2);
+        assertEquals("O valor sacado deve ser descontado do saldo da conta",
+                saldoInicial - 2,
+                contaDoJoao.getSaldoEmReais()
+        );
+    }
+
+    @Test
+    public void testarSaqueSemFundos() {
+        contaDoJoao.sacar(100000);
+        assertEquals("Saques de valores maiores que o saldo não devem ser permitidos",
+                saldoInicial,
+                contaDoJoao.getSaldoEmReais()
+        );
+    }
 
     @Test
     public void testarTransferencia() {
-        Correntista maria = new Correntista("Maria", 22222);
-        ContaCorrente contaDaMaria = new ContaCorrente(2, maria);
-
-        double saldoMariaAntes = contaDaMaria.getSaldoEmReais();
-        double saldoJoaoAntes = contaDoJoao.getSaldoEmReais();
-
 
         contaDoJoao.efetuarTransferecia(contaDaMaria, 3);
 
-        assertEquals("A conta que recebe a transferencia deve ter o saldo aumentado em 3, pois recebeu 3 reais da outra conta.",
-                 saldoMariaAntes + 3,
+        assertEquals("O valor da conta que recebe a transferencia deve ter o saldo aumentado em 3, pois recebeu esse valor da outra conta.",
+                 saldoInicial + 3,
                 contaDaMaria.getSaldoEmReais(),
                 FLOAT_DELTA
         );
 
-        assertEquals("A conta que efetuou a transferencia dece ter o saldo diminuido em 3, pois trasferiu 3 reais para outra conta.",
-                saldoJoaoAntes - 3,
+        assertEquals("O valor da conta que efetuou a transferencia deve ter o saldo reduzido em 3, pois trasferiu esse valor para outra conta.",
+                saldoInicial - 3,
                 contaDoJoao.getSaldoEmReais(),
                 FLOAT_DELTA
         );
@@ -106,8 +105,6 @@ public class ContaCorrenteTest {
 
     @Test
     public void testarTransferenciaSemFundos() {
-        Correntista maria = new Correntista("Maria", 22222);
-        ContaCorrente contaDaMaria = new ContaCorrente(2, maria);
 
         contaDoJoao.efetuarTransferecia(contaDaMaria, 100000);
 
@@ -128,11 +125,15 @@ public class ContaCorrenteTest {
     public void testarQuantidadeDeTransacoesDeTodasAsContas() {
         Correntista pedro = new Correntista("pedro",33333 );
         ContaCorrente contaDoPedro = new ContaCorrente(3, pedro);
+        Correntista paulo = new Correntista("paulo",33333 );
+        ContaCorrente contaDoPaulo = new ContaCorrente(3, pedro);
+
+
 
         contaDoJoao.receberDepositoEmDinheiro(300);
-        contaDoPedro.receberDepositoEmDinheiro(50);
-        contaDoPedro.receberDepositoEmDinheiro(50);
-        contaDoPedro.receberDepositoEmDinheiro(50);
+        contaDoPaulo.receberDepositoEmDinheiro(50);
+        contaDoPedro.receberDepositoEmDinheiro(502);
+        contaDoPaulo.receberDepositoEmDinheiro(125);
 
         assertEquals("Checar numero de tranferencia em todas as contas correntes" ,
                 4,
