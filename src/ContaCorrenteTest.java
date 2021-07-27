@@ -85,16 +85,20 @@ public class ContaCorrenteTest {
         Correntista maria = new Correntista("Maria", 22222);
         ContaCorrente contaDaMaria = new ContaCorrente(2, maria);
 
+        double saldoMariaAntes = contaDaMaria.getSaldoEmReais();
+        double saldoJoaoAntes = contaDoJoao.getSaldoEmReais();
+
+
         contaDoJoao.efetuarTransferecia(contaDaMaria, 3);
 
-        assertEquals("A conta da maria dece ter o saldo inicial mais 3 pois recebeu 3 reais do joao",
-                saldoInicial + 3,
+        assertEquals("A conta que recebe a transferencia deve ter o saldo aumentado em 3, pois recebeu 3 reais da outra conta.",
+                 saldoMariaAntes + 3,
                 contaDaMaria.getSaldoEmReais(),
                 FLOAT_DELTA
         );
 
-        assertEquals("A conta do joao deve ter o saldo inicial menos 3 pois fez uma tranferencia para maria",
-                saldoInicial - 3,
+        assertEquals("A conta que efetuou a transferencia dece ter o saldo diminuido em 3, pois trasferiu 3 reais para outra conta.",
+                saldoJoaoAntes - 3,
                 contaDoJoao.getSaldoEmReais(),
                 FLOAT_DELTA
         );
